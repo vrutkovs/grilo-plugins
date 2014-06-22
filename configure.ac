@@ -370,6 +370,49 @@ DEPS_JAMENDO_LIBS="$DEPS_LIBS $GRLNET_LIBS $XML_LIBS"
 AC_SUBST(DEPS_JAMENDO_LIBS)
 
 # ----------------------------------------------------------
+# BUILD AMPACHE PLUGIN
+# ----------------------------------------------------------
+
+AC_ARG_ENABLE(ampache,
+        AC_HELP_STRING([--enable-ampache],
+                [enable Ampache plugin (default: auto)]),
+        [
+                case "$enableval" in
+                     yes)
+                        if test "x$HAVE_GRLNET" = "xno"; then
+                           AC_MSG_ERROR([grilo-net-0.2 >= 0.2.2 not found, install it or use --disable-ampache])
+                        fi
+                        if test "x$HAVE_XML" = "xno"; then
+                           AC_MSG_ERROR([libxml-2.0 not found, install it or use --disable-ampache])
+                        fi
+                        ;;
+                esac
+        ],
+        [
+                if test "x$HAVE_GRLNET" = "xyes" -a "x$HAVE_XML" = "xyes"; then
+                   enable_ampache=yes
+                else
+                   enable_ampache=no
+                fi
+        ])
+
+AM_CONDITIONAL([AMPACHE_PLUGIN], [test "x$enable_ampache" = "xyes"])
+GRL_PLUGINS_ALL="$GRL_PLUGINS_ALL ampache"
+if test "x$enable_jamendo" = "xyes"
+then
+  GRL_PLUGINS_ENABLED="$GRL_PLUGINS_ENABLED ampache"
+fi
+
+AMPACHE_PLUGIN_ID="grl-ampache"
+AC_SUBST(AMPACHE_PLUGIN_ID)
+AC_DEFINE_UNQUOTED([AMPACHE_PLUGIN_ID], ["$AMPACHE_PLUGIN_ID"], [Ampache plugin ID])
+
+DEPS_AMPACHE_CFLAGS="$DEPS_CFLAGS $GRLNET_CFLAGS $XML_CFLAGS"
+AC_SUBST(DEPS_AMPACHE_CFLAGS)
+DEPS_AMPACHE_LIBS="$DEPS_LIBS $GRLNET_LIBS $XML_LIBS"
+AC_SUBST(DEPS_AMPACHE_LIBS)
+
+# ----------------------------------------------------------
 # BUILD LASTFM ALBUM ART PLUGIN
 # ----------------------------------------------------------
 
@@ -1433,6 +1476,7 @@ AC_CONFIG_FILES([
   po/Makefile.in
   po/Makefile
   src/Makefile
+  src/ampache/Makefile
   src/apple-trailers/Makefile
   src/bliptv/Makefile
   src/bookmarks/Makefile

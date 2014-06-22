@@ -1,0 +1,10 @@
+<plugin>
+  <info>
+    <name>Ampache</name>
+    <module>libgrlampache</module>
+    <description>A plugin for streaming music from Ampache server</description>
+    <author>Sai Suman Prayaga</author>
+    <license>LGPL</license>
+    <site>http://sai-prayaga.rhcloud.com</site>
+  </info>
+</plugin>

@@ -10,6 +10,10 @@ include $(top_srcdir)/gtester.mk
 
 SUBDIRS =
 
+if AMPACHE_PLUGIN
+SUBDIRS += ampache
+endif
+
 if APPLE_TRAILERS_PLUGIN
 SUBDIRS += apple-trailers
 endif
@@ -115,7 +119,7 @@ SUBDIRS += freebox
 endif
 
 DIST_SUBDIRS = \
-   apple-trailers bliptv bookmarks dleyna dmap filesystem flickr freebox gravatar jamendo \
+   ampache apple-trailers bliptv bookmarks dleyna dmap filesystem flickr freebox gravatar jamendo \
    lastfm-albumart local-metadata lua-factory magnatune metadata-store optical-media   \
    pocket podcasts raitv shoutcast thetvdb tmdb tracker upnp vimeo youtube
 
