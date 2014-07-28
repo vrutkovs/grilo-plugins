@@ -557,16 +557,28 @@ generate_api_key(GrlConfig *config, GrlRegistry *registry, GrlPlugin *plugin)
   GRL_TRACE();
   struct PluginInfo *plugininfo = g_slice_new0 (struct PluginInfo);
   gchar *current_time =  g_strdup_printf("%" G_GUINT64_FORMAT, g_get_real_time()/1000000);
+  GRL_DEBUG ("current_time %s", current_time);
   gchar *pass_hash =  g_compute_checksum_for_string(G_CHECKSUM_SHA256, grl_config_get_password(config), -1);
-  gchar *passphrase =  g_compute_checksum_for_string(G_CHECKSUM_SHA256, g_strconcat(current_time,pass_hash, NULL), -1);
-  gchar *url = g_strdup_printf(AMPACHE_GENERATE_AUTH, grl_config_get_string(config, "host_url"), passphrase, current_time, AMPACHE_VERSION, grl_config_get_username(config));
+  GRL_DEBUG ("pass_hash %s", pass_hash);
+  gchar *passphrase =  g_compute_checksum_for_string(G_CHECKSUM_SHA256, g_strconcat(current_time, pass_hash, NULL), -1);
+  GRL_DEBUG ("passphrase %s", passphrase);
+  gchar *username = grl_config_get_username(config);
+  GRL_DEBUG ("username %s", username);
+  gchar *host_url = grl_config_get_string(config, "host_url");
+  GRL_DEBUG ("host_url %s", host_url);
+  gchar *url = g_strdup_printf(AMPACHE_GENERATE_AUTH, host_url, passphrase, current_time, AMPACHE_VERSION, username);
+  GRL_DEBUG ("url %s", url);
+
   GrlNetWc * wc = grl_net_wc_new();
   plugininfo->host_url = grl_config_get_string(config, "host_url");
   plugininfo->plugin = plugin;
+  GRL_INFO ("Starting request");
   grl_net_wc_request_async(wc, url, NULL, generate_api_key_cb, plugininfo);
   g_free(current_time);
   g_free(pass_hash);
   g_free(passphrase);
+  g_free(username);
+  g_free(host_url);
 }
 
 static void
