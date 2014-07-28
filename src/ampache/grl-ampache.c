@@ -27,7 +27,7 @@ GRL_LOG_DOMAIN_STATIC(ampache_log_domain);
 #define AMPACHE_TRACK "song" 
 /* ---- ampache Web API  ---- */
 
-#define API_URL "%s/server/xml.server.php?"
+#define API_URL "%s/remote.php/ampache/server/xml.server.php?"
 #define AMPACHE_ACTION API_URL "action="
 #define FILTER "&filter=%s"
 #define OFFSET "&offset=%u"
