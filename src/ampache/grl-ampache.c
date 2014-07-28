@@ -129,14 +129,8 @@ gboolean grl_ampache_plugin_init (GrlRegistry *registry,
 
 static const GList *grl_ampache_source_supported_keys (GrlSource *source);
 
-// static void grl_ampache_source_resolve (GrlSource *source,
-                                        // GrlSourceResolveSpec *rs);
-
 static void grl_ampache_source_browse (GrlSource *source,
                                        GrlSourceBrowseSpec *bs);
-
-// static void grl_ampache_source_query (GrlSource *source,
-                                      // GrlSourceQuerySpec *qs);
 
 static void grl_ampache_source_search (GrlSource *source,
                                        GrlSourceSearchSpec *ss);
@@ -185,9 +179,7 @@ grl_ampache_source_class_init (GrlAmpacheSourceClass * klass)
 
   source_class->cancel = grl_ampache_source_cancel;
   source_class->supported_keys = grl_ampache_source_supported_keys;
-  // source_class->resolve = grl_ampache_source_resolve;
   source_class->browse = grl_ampache_source_browse;
-  // source_class->query = grl_ampache_source_query;
   source_class->search = grl_ampache_source_search;
 
   g_type_class_add_private (klass, sizeof (GrlAmpacheSourcePriv));
@@ -355,12 +347,10 @@ xml_parse_entry (xmlDocPtr doc, xmlNodePtr entry)
     } else if (!xmlStrcmp (node->name, (const xmlChar *) "album")) {
       data->album_name =
         (gchar *) xmlNodeListGetString (doc, node->xmlChildrenNode, 1);
-      // data->album_id = (gchar *) xmlGetProp (node, (const xmlChar *) "id");
 
     } else if (!xmlStrcmp (node->name, (const xmlChar *) "artist")) {
       data->artist_name =
         (gchar *) xmlNodeListGetString (doc, node->xmlChildrenNode, 1);
-      // data->artist_id = (gchar *) xmlGetProp (node, (const xmlChar *) "id");
 
     } else if (!xmlStrcmp (node->name, (const xmlChar *) "art")) {
       data->album_image =
@@ -962,8 +952,6 @@ grl_ampache_plugin_init (GrlRegistry *registry,
   bindtextdomain (GETTEXT_PACKAGE, LOCALEDIR);
   bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
 
-
-
   if (!configs) {
     GRL_INFO ("Configuration not provided! Plugin not loaded");
     return FALSE;
@@ -975,11 +963,7 @@ grl_ampache_plugin_init (GrlRegistry *registry,
   }
 
   config = GRL_CONFIG (configs->data);
-  host_url = grl_config_get_string (config, "host_url");
-  if (!host_url) {
-    GRL_INFO ("Missin host URL, cannot load plugin");
-    return FALSE;
-  }
+  // TODO: Check that configs contain all necessary data: host_url, username, password
 
   generate_api_key(config, registry ,plugin);
   return TRUE;
