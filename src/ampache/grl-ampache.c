@@ -2,6 +2,7 @@
 #include "config.h"
 #endif
 
+#include "grl-ampache.h"
 #include <grilo.h>
 #include <glib.h>
 #include <glib/gi18n-lib.h>
@@ -10,8 +11,6 @@
 #include <libxml/xmlmemory.h>
 #include <string.h>
 #include <errno.h>
-
-#include "grl-ampache.h"
 
 /* --------- Logging  -------- */
 
