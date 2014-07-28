@@ -977,6 +977,26 @@ grl_ampache_plugin_init (GrlRegistry *registry,
   config = GRL_CONFIG (configs->data);
   // TODO: Check that configs contain all necessary data: host_url, username, password
 
+  if (!config) {
+    GRL_INFO ("Error parsing config, plugin not loaded");
+    return FALSE;
+  }
+
+  if (!grl_config_get_username(config)) {
+    GRL_INFO ("Username not specifed, plugin not loaded");
+    return FALSE;
+  }
+
+  if (!grl_config_get_password(config)) {
+    GRL_INFO ("Password not specifed, plugin not loaded");
+    return FALSE;
+  }
+
+  if (!grl_config_get_string(config, "host_url")) {
+    GRL_INFO ("Host URL not specifed, plugin not loaded");
+    return FALSE;
+  }
+
   generate_api_key(config, registry ,plugin);
   return TRUE;
 }
