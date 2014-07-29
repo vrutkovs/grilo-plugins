@@ -212,25 +212,6 @@ free_entry (Entry *entry)
   g_slice_free (Entry, entry);
 }
 
-static gint
-xml_count_children (xmlNodePtr node)
-{
-#if (LIBXML2_VERSION >= 20700)
-  return xmlChildElementCount (node);
-#else
-  gint nchildren = 0;
-  xmlNodePtr i = node->xmlChildrenNode;
-
-  while (i) {
-    nchildren++;
-    i = i->next;
-  }
-
-  return nchildren;
-#endif
-}
-
-
 static void generate_api_key_cb(GObject *source_object,
                                 GAsyncResult *res,
                                 gpointer user_data)
@@ -344,6 +325,7 @@ xml_parse_entry (xmlDocPtr doc, xmlNodePtr entry)
         data->album_name =
           (gchar *) xmlNodeListGetString (doc, node->xmlChildrenNode, 1);
       }
+
     } else if (!xmlStrcmp (node->name, (const xmlChar *) "album")) {
       data->album_name =
         (gchar *) xmlNodeListGetString (doc, node->xmlChildrenNode, 1);
@@ -471,7 +453,7 @@ xml_parse_result (const gchar *str, GError **error, XmlParseEntries *xpe)
     goto free_resources;
   }
 
-  child_nodes = xml_count_children (node);
+  child_nodes = xmlChildElementCount (node);
   node = node->xmlChildrenNode;
 
 
@@ -975,7 +957,6 @@ grl_ampache_plugin_init (GrlRegistry *registry,
   }
 
   config = GRL_CONFIG (configs->data);
-  // TODO: Check that configs contain all necessary data: host_url, username, password
 
   if (!config) {
     GRL_INFO ("Error parsing config, plugin not loaded");
